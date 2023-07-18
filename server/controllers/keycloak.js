@@ -90,7 +90,7 @@ async function keycloakSignInCallback(ctx) {
     const userResponse = await httpClient.post(userInfoEndpoint, {}, { headers: { authorization: `Bearer ${response.data.access_token}` } });
 
     const email = userResponse.data.email;
-    console.log("User Response: " + userResponse)
+    console.log("User Response: " + userResponse.data)
     console.log("email: " + email)
 
     if (
