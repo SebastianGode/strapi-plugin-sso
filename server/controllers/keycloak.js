@@ -100,6 +100,7 @@ async function keycloakSignInCallback(ctx) {
     ) {
       return ctx.send(oauthService.renderSignUpError(`You are not allowed to access this site`));
     }
+    console.log("Includes super-admin-role: " + userResponse.data.roles?.includes(KEYCLOAK_STRAPI_SUPER_ADMIN_ROLE))
 
     const dbUser = await userService.findOneByEmail(email);
 
@@ -115,6 +116,7 @@ async function keycloakSignInCallback(ctx) {
       if (!isEmailVerified) {
         return ctx.send(oauthService.renderSignUpError(`Email ${email} is not verified`));
       }
+      console.log("E-Mail verified: " + isEmailVerified)
       // Register a new account
       const keycloakRoles = await roleService.keycloakRoles();
 
@@ -137,10 +139,13 @@ async function keycloakSignInCallback(ctx) {
           : []
       ).filter(Boolean);
 
+      console.log("Roles to assign: " + roles)
+
       const defaultLocale = oauthService.localeFindByHeader(ctx.request.headers);
       activateUser = await oauthService.createUser(email, userResponse.data.family_name, userResponse.data.given_name, defaultLocale, roles);
       jwtToken = await tokenService.createJwtToken(activateUser);
 
+      console.log(activateUser)
       // Trigger webhook
       await oauthService.triggerWebHook(activateUser);
     }
