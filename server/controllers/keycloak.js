@@ -121,33 +121,44 @@ async function keycloakSignInCallback(ctx) {
       const keycloakRoles = await roleService.keycloakRoles();
       console.log("keycloakRoles: " + keycloakRoles)
 
-      const roles = (
-        keycloakRoles && keycloakRoles['roles']
-          ? keycloakRoles['roles'].map((role) => {
-              console.log("Role inside the map function:" + role)
-              if (role === 1 && !userResponse.data.realm_access.roles?.includes(KEYCLOAK_STRAPI_SUPER_ADMIN_ROLE)) {
-                return null;
-              }
-              if (role === 2 && !userResponse.data.realm_access.roles?.includes(KEYCLOAK_STRAPI_EDITOR_ROLE)) {
-                return null;
-              }
-              if (role === 3 && !userResponse.data.realm_access.roles?.includes(KEYCLOAK_STRAPI_AUTHOR_ROLE)) {
-                return null;
-              }
-              return {
-                id: role,
-              };
-            })
-          : []
-      ).filter(Boolean);
+      // const roles = (
+      //   keycloakRoles && keycloakRoles['roles']
+      //     ? keycloakRoles['roles'].map((role) => {
+      //         console.log("Role inside the map function:" + role)
+      //         if (role === 1 && !userResponse.data.realm_access.roles?.includes(KEYCLOAK_STRAPI_SUPER_ADMIN_ROLE)) {
+      //           return null;
+      //         }
+      //         if (role === 2 && !userResponse.data.realm_access.roles?.includes(KEYCLOAK_STRAPI_EDITOR_ROLE)) {
+      //           return null;
+      //         }
+      //         if (role === 3 && !userResponse.data.realm_access.roles?.includes(KEYCLOAK_STRAPI_AUTHOR_ROLE)) {
+      //           return null;
+      //         }
+      //         return {
+      //           id: role,
+      //         };
+      //       })
+      //     : []
+      // ).filter(Boolean);
 
-      console.log("Roles to assign: " + roles)
+      // console.log("Roles to assign: " + roles)
 
-      const individual_roles = [1]
+
+      const roles =  []
+
+      if (userResponse.data.realm_access.roles?.includes(KEYCLOAK_STRAPI_SUPER_ADMIN_ROLE)) {
+        roles.push(1)
+      }
+      if (userResponse.data.realm_access.roles?.includes(KEYCLOAK_STRAPI_EDITOR_ROLE)) {
+        roles.push(2)
+      }
+      if (userResponse.data.realm_access.roles?.includes(KEYCLOAK_STRAPI_AUTHOR_ROLE)) {
+        roles.push(3)
+      }
 
       const defaultLocale = oauthService.localeFindByHeader(ctx.request.headers);
       // activateUser = await oauthService.createUser(email, userResponse.data.family_name, userResponse.data.given_name, defaultLocale, roles);
-      activateUser = await oauthService.createUser(email, userResponse.data.family_name, userResponse.data.given_name, defaultLocale, individual_roles);
+      activateUser = await oauthService.createUser(email, userResponse.data.family_name, userResponse.data.given_name, defaultLocale, roles);
       jwtToken = await tokenService.createJwtToken(activateUser);
 
       console.log(activateUser)
