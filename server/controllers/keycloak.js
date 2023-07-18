@@ -67,9 +67,11 @@ async function keycloakSignInCallback(ctx) {
   const oauthService = strapi.plugin('strapi-plugin-sso').service('oauth');
   const roleService = strapi.plugin('strapi-plugin-sso').service('role');
 
+  
   if (!ctx.query.code) {
     return ctx.send(oauthService.renderSignUpError(`code Not Found`));
   }
+  console.log("Code from keycloak: " + ctx.query.code)
 
   const params = new URLSearchParams();
   params.append('code', ctx.query.code);
@@ -88,6 +90,8 @@ async function keycloakSignInCallback(ctx) {
     const userResponse = await httpClient.post(userInfoEndpoint, {}, { headers: { authorization: `Bearer ${response.data.access_token}` } });
 
     const email = userResponse.data.email;
+    console.log("User Response: " + userResponse)
+    console.log("email: " + email)
 
     if (
       !userResponse.data.roles?.includes(KEYCLOAK_STRAPI_SUPER_ADMIN_ROLE) &&
