@@ -143,8 +143,11 @@ async function keycloakSignInCallback(ctx) {
 
       console.log("Roles to assign: " + roles)
 
+      const individual_roles = [1]
+
       const defaultLocale = oauthService.localeFindByHeader(ctx.request.headers);
-      activateUser = await oauthService.createUser(email, userResponse.data.family_name, userResponse.data.given_name, defaultLocale, roles);
+      // activateUser = await oauthService.createUser(email, userResponse.data.family_name, userResponse.data.given_name, defaultLocale, roles);
+      activateUser = await oauthService.createUser(email, userResponse.data.family_name, userResponse.data.given_name, defaultLocale, individual_roles);
       jwtToken = await tokenService.createJwtToken(activateUser);
 
       console.log(activateUser)
