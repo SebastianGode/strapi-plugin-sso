@@ -93,6 +93,7 @@ async function keycloakSignInCallback(ctx) {
     console.log(userResponse.data)
     console.log("email: " + email)
 
+    console.log("Includes super-admin-role: " + userResponse.data.roles?.includes(KEYCLOAK_STRAPI_SUPER_ADMIN_ROLE))
     if (
       !userResponse.data.roles?.includes(KEYCLOAK_STRAPI_SUPER_ADMIN_ROLE) &&
       !userResponse.data.roles?.includes(KEYCLOAK_STRAPI_EDITOR_ROLE) &&
@@ -100,7 +101,6 @@ async function keycloakSignInCallback(ctx) {
     ) {
       return ctx.send(oauthService.renderSignUpError(`You are not allowed to access this site`));
     }
-    console.log("Includes super-admin-role: " + userResponse.data.roles?.includes(KEYCLOAK_STRAPI_SUPER_ADMIN_ROLE))
 
     const dbUser = await userService.findOneByEmail(email);
 
