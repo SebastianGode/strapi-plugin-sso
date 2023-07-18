@@ -119,6 +119,7 @@ async function keycloakSignInCallback(ctx) {
       console.log("E-Mail verified: " + isEmailVerified)
       // Register a new account
       const keycloakRoles = await roleService.keycloakRoles();
+      console.log("keycloakRoles: " + keycloakRoles)
 
       const roles = (
         keycloakRoles && keycloakRoles['roles']
