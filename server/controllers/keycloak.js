@@ -123,6 +123,7 @@ async function keycloakSignInCallback(ctx) {
       const roles = (
         keycloakRoles && keycloakRoles['roles']
           ? keycloakRoles['roles'].map((role) => {
+              console.log("Role inside the map function:" + role)
               if (role === 1 && !userResponse.data.realm_access.roles?.includes(KEYCLOAK_STRAPI_SUPER_ADMIN_ROLE)) {
                 return null;
               }
