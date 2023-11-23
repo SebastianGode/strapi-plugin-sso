@@ -4,8 +4,9 @@ const path = require('path');
 console.log("\n\n")
 console.warn(path.resolve("keycloak.js"))
 console.warn(path.resolve("@strapi/admin/server/utils"))
+console.warn(path.resolve("node_modules/@strapi/admin/server/utils"))
 // const { getService } = require('@strapi/admin/server/utils');
-const { getService } = require('../../node_modules/@strapi/admin/server/utils');
+const { getService } = require('node_modules/@strapi/admin/server/utils');
 
 const configValidation = () => {
   const requiredConfig = ['KEYCLOAK_DOMAIN', 'KEYCLOAK_REALM', 'KEYCLOAK_CLIENT_ID', 'KEYCLOAK_CLIENT_SECRET', 'KEYCLOAK_REDIRECT_URI'];
