@@ -1,4 +1,5 @@
-const { getService } = require('@strapi/admin/server/utils');
+// const { getService } = require('@strapi/admin/server/utils');
+const { getService } = require('../../../node_modules/@strapi/admin/server/utils');
 const strapiUtils = require('@strapi/utils');
 const generator = require('generate-password');
 
